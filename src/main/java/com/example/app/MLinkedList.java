@@ -1,47 +1,42 @@
 package com.example.app;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 public class MLinkedList<E extends Comparable<E>> {
 
-    private MNode<E> head;
+    private MNode<E> first;
 
-    private MNode<E> tail;
+    private MNode<E> last;
 
     private int size;
 
     public void add(E e) {
 
-        MNode<E> node = new MNode<>();
-        node.value = e;
+        MNode<E> node = new MNode<>(last, e, null);
 
-        if (tail == null && head == null) {
-            head = node;
-            tail = node;
-
-            size++;
+        if (first == null && last == null) {
+            first = node;
+            last = node;
         } else {
-
-            MNode<E> oldTail = this.tail;
-            oldTail.next = node;
-            node.prev = oldTail;
-
-            tail = node;
-
-            size++;
+            last.next = node;
+            last = node;
         }
+        size++;
     }
 
     public void remove(E e) {
-        MNode<E> currentNode = this.head;
+        MNode<E> currentNode = this.first;
 
         // O(1)
-        if (head != null && head.value.compareTo(e) == 0) {
-            final MNode<E> oldHead = this.head;
+        if (first != null && first.value.compareTo(e) == 0) {
+            final MNode<E> oldHead = this.first;
 
             if (oldHead.next != null) {
-                this.head = oldHead.next;
-                this.head.prev = null;
+                this.first = oldHead.next;
+                this.first.prev = null;
             } else {
-                this.head = null;
+                this.first = null;
             }
 
             size--;
@@ -72,7 +67,7 @@ public class MLinkedList<E extends Comparable<E>> {
     }
 
     public void print() {
-        MNode<E> currentNode = this.head;
+        MNode<E> currentNode = this.first;
 
         if (currentNode != null) {
 
@@ -96,8 +91,41 @@ public class MLinkedList<E extends Comparable<E>> {
         private MNode<E> next;
         private MNode<E> prev;
 
+        public MNode(){}
+
+        public MNode(MNode<E> prev, E value, MNode<E> next) {
+            this.prev = prev;
+            this.value = value;
+            this.next = next;
+        }
     }
 
+
+    @Test
+    void test () {
+        MLinkedList<String> linkedList = new MLinkedList<>();
+
+        linkedList.add("A");
+        linkedList.add("B");
+        linkedList.add("C");
+        linkedList.add("D");
+
+        Assertions.assertEquals(4, linkedList.size());
+
+        linkedList.remove("A");
+        Assertions.assertEquals(3, linkedList.size());
+
+        linkedList.remove("B");
+        Assertions.assertEquals(2, linkedList.size());
+
+        linkedList.remove("C");
+        Assertions.assertEquals(1, linkedList.size());
+
+        linkedList.remove("D");
+        Assertions.assertEquals(0, linkedList.size());
+
+        System.out.println("qweqwe");
+    }
 
     public static void main(String[] args) {
         MLinkedList<String> linkedList = new MLinkedList<>();
