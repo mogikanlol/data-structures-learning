@@ -2,8 +2,35 @@ package com.example.app.graph;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class DFS {
+
+    public static List<Integer> dfs_stack(int start, List<List<Integer>> graph) {
+        boolean[] visited = new boolean[graph.size()];
+
+        List<Integer> result = new ArrayList<>();
+
+        Stack<Integer> stack = new Stack<>();
+        stack.push(start);
+
+        while (!stack.isEmpty()) {
+
+            Integer current = stack.pop();
+            System.out.println(current);
+            visited[current] = true;
+
+            List<Integer> adjacentNodes = graph.get(current);
+            for (Integer node : adjacentNodes) {
+                if (visited[node]) {
+                    continue;
+                }
+                stack.push(node);
+            }
+        }
+
+        return result;
+    }
 
     public static List<Integer> dfs(int start, List<List<Integer>> graph) {
         boolean[] visited = new boolean[graph.size()];
